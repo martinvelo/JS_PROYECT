@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./styles/styles.css">
     <script defer src="./main.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="./styles/styles.css">
     <title>Tu Tienda</title>
 </head>
 <body>
     <header class="header">
         <div class="logo">
-            <a href="./index.html"><img src="./img/logo.png" alt="Logo de la marca"></a>
+            <a href="./index.html"><img id="imglogo" src="./img/logo.png" alt="Logo de la marca"></a>
         </div>
         <nav>
             <ul class="nav-links" >
@@ -23,9 +23,17 @@
         </nav>
         <a class="btn-carrito" href="./carrito.html"><button>Carrito <span id="num-carrito">0</span></button></a>
     </header>
-    <main id="main">
-        <div class="carrito-container" id="vent-carrito"></div>
+    <main id="maincarr">
+        <div class="carrito-container" id="vent-carrito">
+            
+        </div>
+        <div id="vacio">
+            <h1 class="titulocarr">Carrito vacio 🤷‍♂️ </h1>
+            <img class="img-carrito" src="./img/carrito-de-compras.png" alt="carrito vacio">
+            <br>
+            <a href="./index.html">Seguir Comprando...</a>
         
+        </div>
     </main>
     <footer class="footer">
         <h4>Direccion San Martin 555 Villa Ramallo</h4>

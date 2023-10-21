@@ -9,11 +9,8 @@ const todas = document.getElementById('todas');
 const carrito = JSON.parse(localStorage.getItem('carrito')) || []; // Obtener el carrito desde el almacenamiento local
 const carritoContainer = document.getElementById('vent-carrito');
 const cantidadCarritoSpan = document.getElementById('num-carrito');
+const urlActual = window.location.href;
 
-// Función para actualizar el contador del carrito
-function actualizarContadorCarrito() {
-    cantidadCarritoSpan.textContent = carrito.length;
-}
 
 function mostrarProducto(newcard) {
     const card = document.createElement('div');
@@ -31,7 +28,15 @@ function mostrarProducto(newcard) {
     ppal.appendChild(card);
 }
 
-fetch(apiUrl)
+// Función para actualizar el contador del carrito
+function actualizarContadorCarrito() {
+    cantidadCarritoSpan.textContent = carrito.length;
+}
+
+// conexion con la API (Excluyendo Carrito.html)
+
+if (urlActual.includes('index.html')) {
+    fetch(apiUrl)
     .then(respuesta => respuesta.json())
     .then(products => {
         productosArray = products;
@@ -39,10 +44,10 @@ fetch(apiUrl)
         productosArray.forEach(product => {
             mostrarProducto(product);
         });
-        // Actualizar el contador del carrito después de cargar los productos
         actualizarContadorCarrito();
     })
-    .catch(error => {
+    // En caso de error conexion con el API LOCAL
+    .catch(err => {
         Swal.fire(
             'No se carga la información. Verifica la conexión',
             'Los datos cargarán de manera local',
@@ -52,19 +57,25 @@ fetch(apiUrl)
             .then(respuesta => respuesta.json())
             .then(localProducts => {
                 productosArray = localProducts;
-                console.log('Cargando datos locales', productosArray);
+                console.log(productosArray);
                 productosArray.forEach(product => {
                     mostrarProducto(product);
                 });
-                // Actualizar el contador del carrito después de cargar los productos locales
+                
                 actualizarContadorCarrito();
             })
             .catch(localError => {
                 console.error('Error al cargar datos locales', localError);
             });
     });
+    
+ }
+
+
+ 
 
 // Filtrado por categorías //
+
 hombre.addEventListener('click', () => {
     ppal.innerHTML = '';
     const productosFiltrados = productosArray.filter(product => product.category === "men's clothing");
@@ -122,7 +133,7 @@ document.addEventListener('click', function (event) {
                 carrito.push(productoagregado);
                 localStorage.setItem('carrito', JSON.stringify(carrito));
                 Swal.fire('Producto agregado al carrito', '', 'success');
-                // Actualizar el contador del carrito
+                
                 actualizarContadorCarrito();
             } else if (result.isDenied) {
                 Swal.fire('No se agregó al carrito', '', 'info');
@@ -132,28 +143,34 @@ document.addEventListener('click', function (event) {
 });
 
 // HTML del carrito y lógica de eliminación de items
+
 document.addEventListener('DOMContentLoaded', function () {
-    carritoContainer.innerHTML = ''; // Limpiar el contenido del carrito al cargar la página
+    carritoContainer.innerHTML = ''; 
 
     // Cards del carrito
     carrito.forEach(function (producto, index) {
         const productoItem = document.createElement('div');
         productoItem.classList.add('card');
         productoItem.classList.add('shadow');
+        const vacio = document.getElementById('vacio');
         productoItem.innerHTML = `
             <img src="${producto.image}" alt="${producto.title}">
             <h3>${producto.title}</h3>
             <p>Precio: $${parseFloat(producto.price).toFixed(2)}</p> <!-- Convertir a número antes de llamar a toFixed -->
             <button class="remover-btn" data-index="${index}">Eliminar</button>`;
+            vacio.style.display = "none";
 
-        // Agregar un evento de clic para eliminar el producto del carrito
+        // Eliminar producto del carrito
         const removerBtn = productoItem.querySelector('.remover-btn');
         removerBtn.addEventListener('click', function () {
-            const index = parseInt(removerBtn.getAttribute('data-index')); // Obtener el índice del botón
-            carrito.splice(index, 1); // Eliminar el producto del carrito
-            localStorage.setItem('carrito', JSON.stringify(carrito)); // Actualizar el carrito en el almacenamiento local
-            carritoContainer.removeChild(productoItem); // Eliminar la tarjeta del producto del carrito visualmente
-            // Actualizar el contador del carrito
+            const index = parseInt(removerBtn.getAttribute('data-index')); 
+            carrito.splice(index, 1); 
+            localStorage.setItem('carrito', JSON.stringify(carrito)); 
+            carritoContainer.removeChild(productoItem); 
+            const vacio = document.getElementById('vacio');
+            vacio.style.display = "block";
+
+        // Actualizar el contador del carrito
             actualizarContadorCarrito();
         });
 
