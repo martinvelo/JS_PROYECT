@@ -6,7 +6,7 @@ const hombre = document.getElementById('hombre');
 const mujer = document.getElementById('mujer');
 const electronica = document.getElementById('electronica');
 const todas = document.getElementById('todas');
-const carrito = JSON.parse(localStorage.getItem('carrito')) || []; // Obtener el carrito desde el almacenamiento local
+const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 const carritoContainer = document.getElementById('vent-carrito');
 const cantidadCarritoSpan = document.getElementById('num-carrito');
 const urlActual = window.location.href;
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
         productoItem.innerHTML = `
             <img src="${producto.image}" alt="${producto.title}">
             <h3>${producto.title}</h3>
-            <p>Precio: $${parseFloat(producto.price).toFixed(2)}</p> <!-- Convertir a número antes de llamar a toFixed -->
+            <p>Precio: $${parseFloat(producto.price).toFixed(2)}</p> 
             <button class="remover-btn" data-index="${index}">Eliminar</button>`;
             vacio.style.display = "none";
 
